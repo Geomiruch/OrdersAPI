@@ -13,7 +13,7 @@
 });
 
 function loadOrders() {
-    fetch('https://localhost:44365/api/Order/Read')
+    fetch('${window.location.origin}/api/Order/Read')
         .then(response => response.json())
         .then(data => displayOrders(data));
 }
@@ -36,7 +36,7 @@ function displayOrders(orders) {
 }
 
 function loadProducts() {
-    fetch('https://localhost:44365/api/Product/Read')
+    fetch('${window.location.origin}/api/Product/Read')
         .then(response => response.json())
         .then(data => displayProducts(data));
 }
@@ -63,7 +63,7 @@ function filterOrders() {
         return;
     }
 
-    fetch(`https://localhost:44365/api/Order/Read/${orderId}`)
+    fetch(`${window.location.origin}/api/Order/Read/${orderId}`)
         .then(response => response.json())
         .then(order => displayOrders([order]))
         .catch(err => displayOrders([])); 
@@ -76,7 +76,7 @@ function filterProducts() {
         return;
     }
 
-    fetch(`https://localhost:44365/api/Product/Read/${productId}`)
+    fetch(`${window.location.origin}/api/Product/Read/${productId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -100,7 +100,7 @@ function filterProductsByCode() {
         return;
     }
 
-    fetch(`https://localhost:44365/api/Product/Read/code/${productCode}`)
+    fetch(`${window.location.origin}/api/Product/Read/code/${productCode}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -135,7 +135,7 @@ function updateProduct() {
         price: parseFloat(productPrice),
     };
 
-    fetch(`https://localhost:44365/api/Product/Update/${productId}`, {
+    fetch(`${window.location.origin}/api/Product/Update/${productId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -171,7 +171,7 @@ function createProduct() {
         price: parseFloat(productPrice),
     };
 
-    fetch('https://localhost:44365/api/Product/Create', {
+    fetch('${window.location.origin}/api/Product/Create', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -195,7 +195,7 @@ function createProduct() {
 }
 
 function loadProductsSelect() {
-    fetch('https://localhost:44365/api/Product/Read')
+    fetch('${window.location.origin}/api/Product/Read')
         .then(response => response.json())
         .then(products => {
             const productsList = document.getElementById('productsList');
@@ -256,7 +256,7 @@ function createOrder() {
         }))
     };
 
-    fetch('https://localhost:44365/api/Order/Create', {
+    fetch('${window.location.origin}/api/Order/Create', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
