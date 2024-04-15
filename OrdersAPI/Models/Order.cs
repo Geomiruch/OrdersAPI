@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace OrdersAPI.Models
 {
@@ -15,5 +16,6 @@ namespace OrdersAPI.Models
         [Required(ErrorMessage = "CustomerPhone is required")]
         [Phone(ErrorMessage = "Invalid phone number")]
         public string CustomerPhone { get; set; }
+        public ICollection<OrderProduct> OrderProducts { get; set; }
     }
 }

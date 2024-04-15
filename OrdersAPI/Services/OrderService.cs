@@ -38,32 +38,51 @@ namespace OrdersAPI.Services
 
         public async Task<IEnumerable<OrderResponseContract>> GetOrders()
         {
-            var orderResponseContracts = await _context.Orders.Select(x => _mapper.Map<OrderResponseContract>(x)).ToListAsync();
-            foreach (var orderResponseContract in orderResponseContracts)
+            var orders = await _context.Orders
+                .Include(o => o.OrderProducts)
+                    .ThenInclude(op => op.Product)
+                .ToListAsync();
+
+            var orderResponseContracts = new List<OrderResponseContract>();
+
+            foreach (var order in orders)
             {
+                var orderResponseContract = _mapper.Map<OrderResponseContract>(order);
                 orderResponseContract.Products = new List<ProductResponseContract>();
-                var orderProducts = await _context.OrderProducts.Where(x => x.OrderId == orderResponseContract.Id).ToListAsync();
-                foreach(var orderProduct in orderProducts)
+
+                foreach (var orderProduct in order.OrderProducts)
                 {
-                    orderResponseContract.Products.Add(_mapper.Map<ProductResponseContract>(await _context.Products.FindAsync(orderProduct.ProductId)));
+                    var productResponseContract = _mapper.Map<ProductResponseContract>(orderProduct.Product);
+                    orderResponseContract.Products.Add(productResponseContract);
                 }
+
+                orderResponseContracts.Add(orderResponseContract);
             }
+
             return orderResponseContracts;
         }
 
         public async Task<OrderResponseContract> GetOrderById(int id)
         {
-            var orderResponseContract = _mapper.Map<OrderResponseContract>(await _context.Orders.FindAsync(id));
-            if (orderResponseContract == null)
+            var order = await _context.Orders
+                .Include(o => o.OrderProducts)
+                    .ThenInclude(op => op.Product)
+                .FirstOrDefaultAsync(o => o.Id == id);
+
+            if (order == null)
             {
                 return null;
             }
+
+            var orderResponseContract = _mapper.Map<OrderResponseContract>(order);
             orderResponseContract.Products = new List<ProductResponseContract>();
-            var orderProducts = await _context.OrderProducts.Where(x => x.OrderId == orderResponseContract.Id).ToListAsync();
-            foreach (var orderProduct in orderProducts)
+
+            foreach (var orderProduct in order.OrderProducts)
             {
-                orderResponseContract.Products.Add(_mapper.Map<ProductResponseContract>(await _context.Products.FindAsync(orderProduct.ProductId)));
+                var productResponseContract = _mapper.Map<ProductResponseContract>(orderProduct.Product);
+                orderResponseContract.Products.Add(productResponseContract);
             }
+
             return orderResponseContract;
         }
     }
