@@ -13,7 +13,7 @@
 });
 
 function loadOrders() {
-    fetch('${window.location.origin}/api/Order/Read')
+    fetch(`${window.location.origin}/api/Order/Read`)
         .then(response => response.json())
         .then(data => displayOrders(data));
 }
@@ -36,7 +36,7 @@ function displayOrders(orders) {
 }
 
 function loadProducts() {
-    fetch('${window.location.origin}/api/Product/Read')
+    fetch(`${window.location.origin}/api/Product/Read`)
         .then(response => response.json())
         .then(data => displayProducts(data));
 }
@@ -171,7 +171,7 @@ function createProduct() {
         price: parseFloat(productPrice),
     };
 
-    fetch('${window.location.origin}/api/Product/Create', {
+    fetch(`${window.location.origin}/api/Product/Create`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -195,7 +195,7 @@ function createProduct() {
 }
 
 function loadProductsSelect() {
-    fetch('${window.location.origin}/api/Product/Read')
+    fetch(`${window.location.origin}/api/Product/Read`)
         .then(response => response.json())
         .then(products => {
             const productsList = document.getElementById('productsList');
@@ -256,7 +256,7 @@ function createOrder() {
         }))
     };
 
-    fetch('${window.location.origin}/api/Order/Create', {
+    fetch(`${window.location.origin}/api/Order/Create`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

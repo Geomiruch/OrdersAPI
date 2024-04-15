@@ -12,7 +12,7 @@ using OrdersAPI.Data;
 namespace OrdersAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240415161949_2")]
+    [Migration("20240415184013_2")]
     partial class _2
     {
         /// <inheritdoc />
@@ -88,7 +88,7 @@ namespace OrdersAPI.Migrations
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -98,6 +98,9 @@ namespace OrdersAPI.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
 
                     b.ToTable("Products");
                 });

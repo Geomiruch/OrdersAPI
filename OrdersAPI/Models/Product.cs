@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OrdersAPI.Models
 {
+    [Index(nameof(Code), IsUnique = true)]
     public class Product
     {
         [Key]
