@@ -27,7 +27,13 @@ namespace OrdersAPI.Services
 
         public async Task<IEnumerable<ProductContract>> GetProducts()
         {
-            return await _context.Products.Select(x => _mapper.Map<ProductContract>(x)).ToListAsync();
+            var products = await _context.Products
+                .FromSqlRaw("SELECT * FROM Products")
+                .ToListAsync();
+
+            var mappedProducts = _mapper.Map<IEnumerable<ProductContract>>(products);
+
+            return mappedProducts;
         }
 
         public async Task<ProductContract> GetProductById(int id)
