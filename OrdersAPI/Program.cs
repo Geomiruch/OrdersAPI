@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using OrdersAPI.Data;
 using OrdersAPI.Services;
 using OrdersAPI.Utils;
@@ -27,7 +28,7 @@ namespace OrdersAPI
             });
 
             builder.Services.AddDbContext<ApplicationDbContext>(opt =>
-                                               opt.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=OrdersAPI_DB;Trusted_Connection=True;MultipleActiveResultSets=true"));
+                                               opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddAutoMapper(typeof(MappingProfile));
