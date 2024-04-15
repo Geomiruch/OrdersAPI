@@ -20,7 +20,6 @@ namespace OrdersAPI.Services
         public async Task<OrderContract> CreateOrder(OrderContract orderContract)
         {
             _context.Orders.Add(orderContract.Order);
-            await _context.SaveChangesAsync();
             var order = orderContract.Order;
             foreach (var prod in orderContract.Products)
             {
