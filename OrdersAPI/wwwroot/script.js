@@ -1,4 +1,6 @@
-﻿document.addEventListener("DOMContentLoaded", () => {
+﻿const PAGE_SIZE = 3;
+
+document.addEventListener("DOMContentLoaded", () => {
     const orderIdFilter = document.getElementById('orderIdFilter');
     const productIdFilter = document.getElementById('productIdFilter');
     const productCodeFilter = document.getElementById('productCodeFilter');
@@ -7,15 +9,33 @@
     productIdFilter.addEventListener('input', filterProducts);
     productCodeFilter.addEventListener('input', filterProductsByCode);
 
-    loadOrders();
-    loadProducts();
+    loadOrders(1);
+    loadProducts(1);
     loadProductsSelect();
 });
 
-function loadOrders() {
+function loadOrders(page) {
+    const start = (page - 1) * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
+
     fetch(`${window.location.origin}/api/Order/Read`)
         .then(response => response.json())
-        .then(data => displayOrders(data));
+        .then(data => {
+            const orders = data.slice(start, end);
+            displayOrders(orders);
+            renderOrderPagination(data.length, page);
+        });
+}
+
+function renderOrderPagination(totalItems, currentPage) {
+    const totalPages = Math.ceil(totalItems / PAGE_SIZE); 
+
+    let paginationHTML = '';
+    for (let i = 1; i <= totalPages; i++) {
+        paginationHTML += `<button onclick="loadOrders(${i})" ${i === currentPage ? 'class="active"' : ''}>${i}</button>`;
+    }
+
+    orderPagination.innerHTML = paginationHTML;
 }
 
 function displayOrders(orders) {
@@ -35,10 +55,29 @@ function displayOrders(orders) {
     });
 }
 
-function loadProducts() {
+
+function loadProducts(page) {
+    const start = (page - 1) * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
+
     fetch(`${window.location.origin}/api/Product/Read`)
         .then(response => response.json())
-        .then(data => displayProducts(data));
+        .then(data => {
+            const products = data.slice(start, end);
+            displayProducts(products);
+            renderProductPagination(data.length, page);
+        });
+}
+
+function renderProductPagination(totalItems, currentPage) {
+    const totalPages = Math.ceil(totalItems / PAGE_SIZE); 
+
+    let paginationHTML = '';
+    for (let i = 1; i <= totalPages; i++) {
+        paginationHTML += `<button onclick="loadProducts(${i})" ${i === currentPage ? 'class="active"' : ''}>${i}</button>`;
+    }
+
+    productPagination.innerHTML = paginationHTML;
 }
 
 function displayProducts(products) {
